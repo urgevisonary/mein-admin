@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Client Data Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Panel</h1>
+       
+        </header>
+
+        <main>
+            <div class="admin-panel">
+                <h2>Data Management</h2>
+                <div class="management-section">
+                    <div class="management-controls">
+                        <button onclick="loadAllData()" class="load-btn">Load All Data</button>
+                        <button onclick="showAddRecordForm()" class="add-btn">Add New Record</button>
+                        <button onclick="saveAllChanges()" class="save-btn" id="saveAllBtn" disabled>Save All Changes</button>
+                        <span id="recordCount" class="record-count"></span>
+                    </div>
+
+                    <!-- Add Record Form -->
+                    <div id="addRecordForm" class="add-record-form" style="display: none;">
+                        <h3>Add New Client Record</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="newUniqueId">Unique ID:</label>
+                                <input type="text" id="newUniqueId" placeholder="Auto-generated if empty">
+                            </div>
+                            <div class="form-group">
+                                <label for="newClientName">Client Name:</label>
+                                <input type="text" id="newClientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newBuildingName">Building Name:</label>
+                                <input type="text" id="newBuildingName">
+                            </div>
+                            <div class="form-group">
+                                <label for="newUnitNo">Unit Number:</label>
+                                <input type="text" id="newUnitNo">
+                            </div>
+                            <div class="form-group">
+                                <label for="newModel">Model:</label>
+                                <input type="text" id="newModel">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAreaSize">Area Size:</label>
+                                <input type="number" id="newAreaSize" placeholder="sq ft">
+                            </div>
+                            <div class="form-group">
+                                <label for="newContractDate">Contract Date:</label>
+                                <input type="date" id="newContractDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="newSaleValue">Sale Value (AED):</label>
+                                <input type="number" id="newSaleValue" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="newReceivedAmount">Received Amount (AED):</label>
+                                <input type="number" id="newReceivedAmount" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPdc">PDC (AED):</label>
+                                <input type="number" id="newPdc" step="0.01" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button onclick="addNewRecord()" class="save-btn">Add Record</button>
+                            <button onclick="cancelAddRecord()" class="cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div id="tableSearchContainer" class="table-search-container" style="display: none;">
+                        <input type="text" id="tableSearchInput" class="table-search-input" placeholder="Search by Unique ID, Client Name, Building, etc..." />
+                        <button onclick="clearTableSearch()" class="table-search-clear">Clear</button>
+                        <span id="searchResultsCount" class="search-results-count"></span>
+                    </div>
+
+                    <div id="dataTableContainer" class="table-container">
+                        <p class="no-data">Click "Load All Data" to view and edit records</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="password-modal" style="display: none;">
+        <div class="password-modal-content">
+            <div class="password-modal-header">
+                <h3>Admin Authentication Required</h3>
+                <span class="password-modal-close" onclick="closePasswordModal()">&times;</span>
+            </div>
+            <div class="password-modal-body">
+                <p>Please enter admin password to continue:</p>
+                <input type="password" id="adminPasswordInput" placeholder="Enter password" />
+                <div id="passwordError" class="password-error"></div>
+            </div>
+            <div class="password-modal-footer">
+                <button onclick="verifyPassword()" class="verify-btn">Verify</button>
+                <button onclick="closePasswordModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div id="errorMessage" class="error-message"></div>
+
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
